@@ -1,26 +1,101 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+}
+
+@layer components {
+
+  /* AUTH  */
+  .authPage {
+    @apply h-screen w-full max-w-md min-w-xs flex justify-center items-center;
+  }
+
+  .authForm {
+    @apply flex flex-col p-10 w-full md:gap-1;
+  }
+
+  .authHeader {
+    @apply flex flex-col justify-center items-center gap-1 text-blue-500 pb-4;
+  }
+
+  .authHeader > h2 {
+    @apply text-xl md:text-2xl font-extrabold text-gray-900;
+  }
+
+  .authHeader > p {
+    @apply text-xs md:text-sm font-light text-gray-700 italic;
+  }
+
+  .authField {
+    @apply flex flex-col text-sm md:text-base pb-4;
+  }
+
+  .authField > div {
+    @apply flex items-center gap-2 px-2 py-1 border-1 rounded-sm border-gray-300 w-full;
+  }
+
+  .authField > div input {
+    @apply w-full focus:outline-none text-sm;
+  }
+
+  .authField > p {
+    @apply text-red-400 text-sm;
+  }
+
+  .authCheckbox {
+    @apply flex items-center gap-2 pb-1; 
+  }
+
+  .authButton {
+    @apply bg-blue-500 text-gray-100 py-2 rounded-tl-md rounded-br-md cursor-pointer font-bold hover:bg-blue-400;
+  }
+
+  .authFooter {
+    @apply flex items-center gap-5 pt-1 text-sm;
+  }
+
+  .authFooter > a {
+    @apply text-blue-700 font-bold cursor-pointer;
+  }
+
+  /* NAVIGATION  */
+  .navList {
+    @apply flex border-b-4 border-blue-500;
+  }
+
+  .navBtn {
+    @apply flex flex-col justify-center items-center gap-2 w-34 h-24 first:border-l-[1px] border-r-[1px] border-gray-500 cursor-pointer hover:bg-blue-100;
+  }
+
+  .navBtnIcon {
+    @apply p-3 rounded-full bg-blue-100 group-hover:bg-white;
+  }
+
+  .navBtnIcon:first-child {
+    @apply text-blue-500;
+  }
+
+  .navBtn > p {
+    @apply text-xs font-bold text-gray-500 uppercase;
+  }
+
+  .navBtnActive {
+    @apply flex flex-col justify-center items-center gap-2 w-34 h-24 first:border-l-[1px] border-r-[1px] border-gray-500 cursor-pointer bg-blue-500; 
+  }
+
+  .navBtnActive > p {
+    @apply text-xs font-bold text-white uppercase;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
