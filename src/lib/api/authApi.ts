@@ -19,5 +19,16 @@ export async function login(
     }        
 
     // Zwaracamy już czyst LoginResponse 
-    return apiResp.data as LoginResponse;
+    return apiResp.data;
+}
+
+export async function logout(): Promise<void> {
+    const apiResp: ApiResponse<null> = 
+        await apiRequest<null>("/auth/logout", {
+            method: "POST",
+        });
+    
+    if(apiResp.status === "ERROR") {
+        console.warn("Logout error: ", apiResp.error)
+    }
 }

@@ -40,6 +40,13 @@ const Navigation = () => {
             path: "/reports",
             icon: ChartColumnBig,
             action: () => {}  
+        }, 
+        {
+            id: 6,
+            label: "TEST",
+            path: "/test",
+            icon: ChartColumnBig,
+            action: () => {}  
         },                       
     ]
 
