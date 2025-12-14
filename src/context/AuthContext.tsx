@@ -1,23 +1,21 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { cache, createContext, use, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { UserDTO } from "@/types/api/auth";
-import { login as apiLogin, logout as apiLogout } from "@/lib/api/authApi";
+import { login as apiLogin, logout as apiLogout, refresh as apiRefresh } from "@/lib/api/authApi";
 
 // obiekt/typ udostępniany w całej aplikacji po zalogowaniu 
 type AuthContextValue = {
     accessToken: string | null;   
     user: UserDTO | null;
-    isLoading: boolean;               //  łądowniae na start (np. odczyt z localstorage)
+    isLoading: boolean;               
+
     login: (login: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
+    refreshSession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-
-// Klucz w localstorage (żeby nie zgubić tokena po refreshu strony) 
-const ACCESS_TOKEN_KEY = "ms_accessToken";
-const USER_KEY = "ms_user";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 
@@ -25,52 +23,64 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<UserDTO | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const savedToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-        const savedUser = localStorage.getItem(USER_KEY);
-
-        if (savedToken) setAccessToken(savedToken);
-        if (savedUser) setUser(JSON.parse(savedUser));
-
-        setIsLoading(false);
-    }, []);
-
-    // Funkcja do logowania - zapytanie do backend 
+    //  -------------------------------
+    //  ------------ LOGIN ------------
+    //  ------------------------------- 
     async function loginFn(login: string, password: string) {
-        // wywołanie funcji API
-
         const data = await apiLogin({ login, password });
-
-        //zapisanie w stanie (pamięć)
         setAccessToken(data.accessToken);
         setUser(data.user);
-
-        // zapis w localStorage 
-        localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
-        localStorage.setItem(USER_KEY, JSON.stringify(data.user));
     }
 
-    // Funkcja logout 
+    //  -------------------------------
+    //  ----------- REFRESH -----------
+    //  ------------------------------- 
+    async function refreshSession() {
+        const data = await apiRefresh();
+        setAccessToken(data.accessToken);
+        setUser(data.user);
+    }
+    
+    //  -------------------------------
+    //  ----------- LOGOUT ------------
+    //  ------------------------------- 
     async function logoutFn() {
-        await apiLogout();
-
-        // czyścimy stany 
-        setAccessToken(null);
-        setUser(null);
-
-        localStorage.removeItem(ACCESS_TOKEN_KEY);
-        localStorage.removeItem(USER_KEY);
+        try {
+            await apiLogout();
+        } finally {
+            setAccessToken(null);
+            setUser(null)
+        }
     }
+
+    useEffect(() => {
+        (async () => {
+            try {
+                await refreshSession();
+            } catch {
+                setAccessToken(null);
+                setUser(null);
+            } finally {
+                setIsLoading(false);
+            }
+        })();
+    }, []);
+
+    const value = useMemo<AuthContextValue>(
+        () => ({ 
+            accessToken, 
+            user, 
+            isLoading, 
+            login: loginFn, 
+            logout: logoutFn, 
+            refreshSession 
+        }),
+        [accessToken, user, isLoading]
+    );
 
     return (
         <AuthContext.Provider
-            value={{
-                accessToken,
-                user,
-                isLoading,
-                login: loginFn,
-                logout: logoutFn,
-            }}
+            value={value}
         >
             {children}
         </AuthContext.Provider>
@@ -83,4 +93,5 @@ export function useAuth() {
     if (!ctx) {
         throw new Error("useAuth() must be used inside <AuthPrivider>")
     }
+    return ctx;
 }

@@ -1,35 +1,56 @@
 "use client"
-import React, { useState } from 'react'
-import { CircleUserRound, KeyRound, LockKeyhole } from 'lucide-react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+
+import React, { useState } from 'react';
+import { CircleUserRound, KeyRound, LockKeyhole } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 const FormLogin = () => {
     
     const route = useRouter();
 
+    // dane z provider'a 
+    const { login: loginUser, isLoading } = useAuth();
+
+    // localne dane formularza
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     
     const [error, setError] = useState("");
+    const [submitting, setSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // metoda submit formularza
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        if (login != "" && password != "") {
-            console.log("Poprawne logowanie!");
-            console.log(`Login: ${login}`);
-            console.log(`Hasło: ${password}`);
+
+        // sprawdzenie login i password
+        if (!login.trim() || !password) {
+            setError("Podaj login i hasło.");
+            return;
+        }
+
+        // loading - blokowanie akcji po przycisku submit
+        setSubmitting(true);
+
+        try {
+            // wysyłamy zapytanie do backend
+            await loginUser(login.trim(), password);
+            // czyszczenie inputs
             setLogin("");
             setPassword("");
-
-            // Przekierowanie 
+            // przekierownie po zalogowaniu
             route.push("/");
-        } else {
-            setError("Podany login lub hasło jest nieprawidłowe!");
-            console.log(error);
+        } catch (err: any) {
+            setError(err?.message ?? "Nie udało się zalogować");
+        } finally {
+            // odblokowanie akcji
+            setSubmitting(false);
         }
-    }
+    };
+
+    const disabled = isLoading || submitting;
 
     return (
         <form onSubmit={handleSubmit} className='authForm'>
@@ -62,10 +83,12 @@ const FormLogin = () => {
                 <p>{error ? error : ""}</p>
             </div>
             <div className='authCheckbox'>
-                <input type="checkbox" />
+                <input type="checkbox" disabled={disabled}/>
                 <p>Zapamiętaj mnie</p>
             </div>
-            <button type='submit' className='authButton'>Zaloguj</button>
+            <button type='submit' className='authButton' disabled={disabled}>
+                {submitting ? "Logowanie..." : "Zaloguj"}
+            </button>
             <div className='authFooter'>
                 <p>Nie masz konta?</p>
                 <Link href='/register'>Zarejestruj się</Link>

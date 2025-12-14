@@ -1,7 +1,13 @@
+'use client';
+
 import React from 'react'
 import { Car, Search } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 const Navbar = () => {
+
+    const { user } = useAuth();
+
     return (
         <div className='flex justify-between w-full px-2 md:px-4 py-2 border-b-1 md:border-b-1 border-gray-500'>
             <div className='flex items-center gap-2'>                
@@ -20,10 +26,10 @@ const Navbar = () => {
                 </div>
                 <div className='md:flex flex-col hidden'>                    
                     <p className='font-bold'>
-                        John
+                        {user ? user.nam1 : "John"}
                     </p>
                     <p className='text-xs leading-1 font-extralight text-teal-600'>
-                        Administrator
+                        {user ? user.nam2 : "Pracownik"}
                     </p>
                 </div>
             </div>

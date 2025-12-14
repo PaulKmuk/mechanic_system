@@ -22,6 +22,20 @@ export async function login(
     return apiResp.data;
 }
 
+export async function refresh(): Promise<LoginResponse> {
+    const apiResp: ApiResponse<LoginResponse> = 
+        await apiRequest<LoginResponse>("/auth/refresh", {
+            method: "POST",
+        })
+    // jeśli ERROR
+    if(apiResp.status === "ERROR" || !apiResp.data) {
+        const msg = apiResp.error?.message ?? "Refresh token failed";
+        console.log(msg);
+        throw new Error(msg);
+    }
+    return apiResp.data;
+}
+
 export async function logout(): Promise<void> {
     const apiResp: ApiResponse<null> = 
         await apiRequest<null>("/auth/logout", {
