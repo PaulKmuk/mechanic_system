@@ -1,6 +1,5 @@
 import { API_BASE_URL } from "@/config/api";
 import type { ApiResponse } from "@/types/api/common";
-import { headers } from "next/headers";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
