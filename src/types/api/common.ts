@@ -13,3 +13,10 @@ export interface ApiResponse<T> {
     data?: T;
     error?: ApiError;
 }
+
+export interface Pagination  {
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPage: number;
+}

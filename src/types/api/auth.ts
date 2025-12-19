@@ -12,7 +12,7 @@ export interface LoginResponse {
 export interface UserAccessPermisionDTO {
     resource: string;
     path: string;
-    premissions: string[];
+    permissions: string[];
 }
 
 export interface UserDTO {
