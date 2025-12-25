@@ -26,14 +26,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-    <main className="flex justify-center w-screen h-screen">
-        <div className="w-6xl h-full flex flex-col">
-            <Navbar />        
-            <Navigation />        
-            {children}        
-            <Footer />
-        </div>
-    </main>
+        <main className="flex justify-center w-screen">
+            <div className="w-6xl h-full flex flex-col overflow-hidden">
+                <Navbar />        
+                <Navigation />        
+                {children}        
+                <Footer />
+            </div>
+        </main>
     )
 }
 

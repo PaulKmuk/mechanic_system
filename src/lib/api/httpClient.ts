@@ -47,7 +47,8 @@ export async function apiRequest<T>(
     const url = buildURL(path, options.query);
 
     // Wywołanie fetch - zapyatnie do backend
-    const respons = await fetch(`${API_BASE_URL}${path}`, {
+    // const respons = await fetch(`${API_BASE_URL}${path}`, {
+    const respons = await fetch(url, {        
         method: options.method,
         headers: {
           "Content-Type": "application/json",

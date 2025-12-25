@@ -55,20 +55,20 @@ const Navigation = () => {
     const [activeBtn, setActiveBtn] = useState("Kalendarz");
 
     return (
-        <div className='navList'>
+        <div className='navList no-scrollbar'>
             {navList.map(navBtn => (
                 <Link
-                    href={navBtn.path} 
-                    key={navBtn.id}            
-                    className={navBtn.label == activeBtn ? 'navBtnActive group' : 'navBtn group'}                                
-                    onClick={() => {
-                        setActiveBtn(navBtn.label)
-                    }}
+                href={navBtn.path} 
+                key={navBtn.id}            
+                className={navBtn.label == activeBtn ? 'navBtnActive group' : 'navBtn group'}                                
+                onClick={() => {
+                    setActiveBtn(navBtn.label)
+                }}
                 >
                     <div className='navBtnIcon'>
                         <navBtn.icon                             
-                            size={14}
-                        />                    
+                            size={13}
+                            />                    
                     </div>
                     <p>
                         {navBtn.label}

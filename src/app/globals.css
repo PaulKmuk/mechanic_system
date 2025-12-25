@@ -6,9 +6,23 @@
 @theme inline {
 }
 
+@layer utilities {
+  /* utils */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE / Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+}
+
 @layer components {
 
-  /* AUTH  */
+  /* ----------- */
+  /* AUTH        */
+  /* ----------- */
   .authPage {
     @apply h-screen w-full max-w-md min-w-xs flex justify-center items-center;
   }
@@ -61,17 +75,19 @@
     @apply text-blue-700 font-bold cursor-pointer;
   }
 
+  /* ----------- */
   /* NAVIGATION  */
+  /* ----------- */
   .navList {
-    @apply flex border-b-4 border-blue-500;
+    @apply flex border-b-4 border-blue-500 overflow-x-scroll;
   }
 
   .navBtn {
-    @apply flex flex-col justify-center items-center gap-2 w-34 h-24 first:border-l-[1px] border-r-[1px] border-gray-500 cursor-pointer hover:bg-blue-100;
+    @apply flex-shrink-0 flex flex-col justify-center items-center gap-2 w-24 h-16 md:w-34 md:h-24 first:border-l-[1px] border-r-[1px] border-gray-500 cursor-pointer hover:bg-blue-100;
   }
 
   .navBtnIcon {
-    @apply p-3 rounded-full bg-blue-100 group-hover:bg-white;
+    @apply p-1 md:p-3 rounded-full bg-blue-100 group-hover:bg-white;
   }
 
   .navBtnIcon:first-child {
@@ -83,13 +99,29 @@
   }
 
   .navBtnActive {
-    @apply flex flex-col justify-center items-center gap-2 w-34 h-24 first:border-l-[1px] border-r-[1px] border-gray-500 cursor-pointer bg-blue-500; 
+    @apply flex-shrink-0 flex flex-col justify-center items-center gap-2 h-16 w-24 md:w-34 md:h-24 first:border-l-[1px] border-r-[1px] border-gray-500 cursor-pointer bg-blue-500; 
   }
 
   .navBtnActive > p {
     @apply text-xs font-bold text-white uppercase;
   }
+
+  /* ------------- */
+  /* PAGE - HEADER */
+  /* ------------- */
+  .pageHeaderContener {
+    @apply flex items-center gap-2 py-2;
+  }
+  
+  .pageHeaderElement {
+    @apply text-xl text-gray-700 font-semibold flex items-center gap-2;
+  }
+
+  .pageHeaderBackBtn {
+    @apply bg-blue-500 text-gray-100 p-0.5 rounded-md cursor-pointer;
+  }
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
